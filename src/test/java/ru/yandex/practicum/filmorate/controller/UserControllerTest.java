@@ -19,27 +19,6 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldThrowExceptionIncorrectEmail() {
-        User user = new User(1, "test.com", "user", "name",
-                LocalDate.of(1983, 10, 26));
-        assertThrows(ValidationException.class, () -> controller.createUser(user));
-    }
-
-    @Test
-    void shouldThrowExceptionIncorrectLogin() {
-        User user = new User(1, "test@test.com", "", "name",
-                LocalDate.of(1983, 10, 26));
-        assertThrows(ValidationException.class, () -> controller.createUser(user));
-    }
-
-    @Test
-    void shouldThrowExceptionBirthdayInFuture() {
-        User user = new User(1, "test@test.com", "user", "name",
-                LocalDate.of(2023, 8, 9));
-        assertThrows(ValidationException.class, () -> controller.createUser(user));
-    }
-
-    @Test
     void shouldThrowExceptionUpdateIncorrectId() {
         User user = new User(1, "test@test.com", "user", "name",
                 LocalDate.of(1983, 10, 26));

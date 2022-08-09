@@ -18,33 +18,9 @@ class FilmControllerTest {
     }
 
     @Test
-    void shouldThrowExceptionNameIsBlank() {
-        Film film = new Film(1, " ", "film",
-                LocalDate.of(1983, 10, 26), 120);
-        assertThrows(ValidationException.class, () -> controller.createFilm(film));
-    }
-
-    @Test
-    void shouldThrowExceptionDescriptionToLong() {
-        Film film = new Film(1, "test", "The Godfather \"Don\" Vito Corleone " +
-                "is the head of the Corleone mafia family in New York." +
-                " He is at the event of his daughter's wedding. " +
-                "Michael, Vito's youngest son and a decorated WW II Marine is also present",
-                LocalDate.of(1983, 10, 26), 120);
-        assertThrows(ValidationException.class, () -> controller.createFilm(film));
-    }
-
-    @Test
     void shouldThrowExceptionReleaseToEarly() {
         Film film = new Film(1, "test", "film",
                 LocalDate.of(1894, 12, 28), 120);
-        assertThrows(ValidationException.class, () -> controller.createFilm(film));
-    }
-
-    @Test
-    void shouldThrowExceptionDurationToShort() {
-        Film film = new Film(1, "test", "film",
-                LocalDate.of(1896, 12, 28), 0);
         assertThrows(ValidationException.class, () -> controller.createFilm(film));
     }
 
