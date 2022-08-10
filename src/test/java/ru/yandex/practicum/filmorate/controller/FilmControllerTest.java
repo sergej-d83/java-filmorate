@@ -11,23 +11,39 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FilmControllerTest {
     FilmController controller;
+    Film film;
 
     @BeforeEach
-    public void userController() {
+    public void setUp() {
         controller = new FilmController();
+        film = new Film(1, "test", "film",
+                LocalDate.of(2022, 1, 1), 120);
+    }
+
+    @Test
+    void shouldCreateNewFilm() {
+        assertEquals(film, controller.createFilm(film));
     }
 
     @Test
     void shouldThrowExceptionReleaseToEarly() {
-        Film film = new Film(1, "test", "film",
-                LocalDate.of(1894, 12, 28), 120);
+        film.setReleaseDate(LocalDate.of(1894, 12, 28));
         assertThrows(ValidationException.class, () -> controller.createFilm(film));
     }
 
     @Test
+    void shouldUpdateFilm() {
+        Film filmTest = controller.createFilm(film);
+        assertEquals(filmTest, film);
+        film.setName("updated film");
+        controller.updateFilm(film);
+        assertEquals(filmTest, film);
+    }
+
+    @Test
     void shouldThrowExceptionUpdateIncorrectId() {
-        Film film = new Film(1, "test", "film",
-                LocalDate.of(1983, 10, 26), 120);
+        controller.createFilm(film);
+        film.setId(10);
         assertThrows(ValidationException.class, () -> controller.updateFilm(film));
     }
 
