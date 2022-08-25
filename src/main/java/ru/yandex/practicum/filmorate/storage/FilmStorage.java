@@ -6,11 +6,10 @@ import java.util.List;
 
 public interface FilmStorage {
 
+    Film getFilmById(Integer id);
     List<Film> getAllFilms();
-
-    Film createFilm(Film film);
-
-    Film updateFilm(Film film);
+    void createFilm(Film film);
+    void updateFilm(Film film);
 
 
 }
