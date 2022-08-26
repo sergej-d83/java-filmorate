@@ -31,7 +31,8 @@ class FilmControllerTest {
     @Test
     void shouldThrowExceptionReleaseToEarly() {
         film.setReleaseDate(LocalDate.of(1894, 12, 28));
-        assertThrows(ValidationException.class, () -> controller.createFilm(film));
+        ValidationException exception = assertThrows(ValidationException.class, () -> controller.createFilm(film));
+        assertEquals("Дата релиза - не раньше 28.12.1895", exception.getMessage());
     }
 
     @Test
@@ -47,7 +48,8 @@ class FilmControllerTest {
     void shouldThrowExceptionUpdateIncorrectId() {
         controller.createFilm(film);
         film.setId(10);
-        assertThrows(NotFoundException.class, () -> controller.updateFilm(film));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> controller.updateFilm(film));
+        assertEquals(String.format("Фильм с таким номером не найден: %s", film.getId()), exception.getMessage());
     }
 
 }

@@ -51,7 +51,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void createUser(User user) {
+    public User createUser(User user) {
 
         if (users.containsValue(user)) {
             log.error("Такой пользователь уже существует");
@@ -65,10 +65,11 @@ public class InMemoryUserStorage implements UserStorage {
         user.setId(id++);
         users.put(user.getId(), user);
         log.info("Создан новый пользователь {}", user);
+        return user;
     }
 
     @Override
-    public void updateUser(User user) {
+    public User updateUser(User user) {
 
         if (users.containsKey(user.getId())) {
             if (user.getName().isBlank()) {
@@ -82,5 +83,6 @@ public class InMemoryUserStorage implements UserStorage {
             throw new NotFoundException(
                     String.format("Пользователь с таким номером не найден: %s", user.getId()));
         }
+        return user;
     }
 }

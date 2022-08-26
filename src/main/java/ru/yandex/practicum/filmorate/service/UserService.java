@@ -21,6 +21,26 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
+    public List<User> getAllUsers() {
+        return userStorage.getAllUsers();
+    }
+
+    public User getUserById(Integer userId) {
+        return userStorage.getUserById(userId);
+    }
+
+    public List<User> getUserFriends(Integer userId) {
+        return userStorage.getUserFriends(userId);
+    }
+
+    public User createUser(User user) {
+        return userStorage.createUser(user);
+    }
+
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
+    }
+
     public void addFriend(Integer userId, Integer otherUserId) {
         log.info("Добавление в друзья пользователя с ID: {} пользователю с ID: {}", otherUserId, userId);
         User user = userStorage.getUserById(userId);
@@ -48,9 +68,5 @@ public class UserService {
                 .filter(friendsOfOtherUser::contains)
                 .map(userStorage::getUserById)
                 .collect(Collectors.toList());
-    }
-
-    public UserStorage getUserStorage() {
-        return userStorage;
     }
 }

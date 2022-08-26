@@ -19,17 +19,17 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
-        return userService.getUserStorage().getAllUsers();
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
     public User getUserById(@PathVariable Integer userId) {
-        return userService.getUserStorage().getUserById(userId);
+        return userService.getUserById(userId);
     }
 
     @GetMapping("/{userId}/friends")
     public List<User> getUserFriends(@PathVariable Integer userId) {
-        return userService.getUserStorage().getUserFriends(userId);
+        return userService.getUserFriends(userId);
     }
 
     @GetMapping("/{userId}/friends/common/{otherId}")
@@ -49,13 +49,11 @@ public class UserController {
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-        userService.getUserStorage().createUser(user);
-        return user;
+        return userService.createUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        userService.getUserStorage().updateUser(user);
-        return user;
+        return userService.updateUser(user);
     }
 }

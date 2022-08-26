@@ -12,7 +12,7 @@ public interface UserStorage {
 
     List<User> getUserFriends(Integer userId);
 
-    void createUser(User user);
+    User createUser(User user);
 
-    void updateUser(User user);
+    User updateUser(User user);
 }

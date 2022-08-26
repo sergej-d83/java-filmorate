@@ -36,7 +36,8 @@ class UserControllerTest {
     void shouldThrowExceptionUpdateIncorrectId() {
         controller.createUser(user);
         user.setId(10);
-        assertThrows(NotFoundException.class, () -> controller.updateUser(user));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> controller.updateUser(user));
+        assertEquals(String.format("Пользователь с таким номером не найден: %s", user.getId()), exception.getMessage());
     }
 
 }

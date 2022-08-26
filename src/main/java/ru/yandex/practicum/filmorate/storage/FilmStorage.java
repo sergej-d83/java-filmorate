@@ -7,9 +7,12 @@ import java.util.List;
 public interface FilmStorage {
 
     Film getFilmById(Integer id);
+
     List<Film> getAllFilms();
-    void createFilm(Film film);
-    void updateFilm(Film film);
+
+    Film createFilm(Film film);
+
+    Film updateFilm(Film film);
 
 
 }
