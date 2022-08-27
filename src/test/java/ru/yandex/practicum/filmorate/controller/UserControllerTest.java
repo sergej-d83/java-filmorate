@@ -2,8 +2,10 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
@@ -16,7 +18,7 @@ class UserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        controller = new UserController();
+        controller = new UserController(new UserService(new InMemoryUserStorage()));
         user = new User(1, "test@test.com", "user", "name",
                 LocalDate.of(1983, 10, 26));
     }
@@ -34,7 +36,8 @@ class UserControllerTest {
     void shouldThrowExceptionUpdateIncorrectId() {
         controller.createUser(user);
         user.setId(10);
-        assertThrows(ValidationException.class, () -> controller.updateUser(user));
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> controller.updateUser(user));
+        assertEquals(String.format("Пользователь с таким номером не найден: %s", user.getId()), exception.getMessage());
     }
 
 }
