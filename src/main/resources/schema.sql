@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users
     email     VARCHAR NOT NULL UNIQUE,
     login     VARCHAR NOT NULL UNIQUE,
     user_name VARCHAR,
-    birthdate DATE
+    birthday DATE
 );
 
 CREATE TABLE IF NOT EXISTS friendships

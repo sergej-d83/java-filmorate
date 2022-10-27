@@ -1,11 +1,14 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -13,7 +16,8 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    @Autowired
+    public UserController(@Qualifier("UserService") UserService userService) {
         this.userService = userService;
     }
 
@@ -29,7 +33,7 @@ public class UserController {
 
     @GetMapping("/{userId}/friends")
     public List<User> getUserFriends(@PathVariable Integer userId) {
-        return userService.getUserFriends(userId);
+        return userService.getFriends(userId);
     }
 
     @GetMapping("/{userId}/friends/common/{otherId}")
