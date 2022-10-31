@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.film.Genre;
 import ru.yandex.practicum.filmorate.storage.dao.GenreDao;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,17 +36,28 @@ public class GenreDaoImpl implements GenreDao {
     public Genre getGenre(Integer genreId) {
         String sql = "SELECT genre_id, genre_name FROM genres WHERE genre_id = ?";
 
-        Genre genre = jdbcTemplate.queryForObject(sql, genreMapper);
+        Genre genre = jdbcTemplate.queryForObject(sql, genreMapper, genreId);
         log.info("Возвращаю жанр: {}", genre);
 
         return genre;
     }
 
     @Override
-    public List<Genre> getAllGenres() {
+    public Collection<Genre> getAllGenres() {
         String sql = "SELECT genre_id, genre_name FROM genres ORDER BY genre_id";
         List<Genre> genres = jdbcTemplate.query(sql, genreMapper);
         log.info("Возвращаю все жанры: {}", genres);
+        return genres;
+    }
+
+    @Override
+    public Set<Genre> getGenresOfFilm(Integer filmId) {
+        String sql = "SELECT * FROM film_genres AS fg "
+                    + "LEFT JOIN genres AS g ON g.genre_id = fg.genre_id "
+                    + "WHERE fg.film_id = ? ORDER BY fg.genre_id";
+
+        Set<Genre> genres = new HashSet<>(jdbcTemplate.query(sql, genreMapper, filmId));
+        log.info("Genres: {}", genres);
         return genres;
     }
 
@@ -58,14 +71,20 @@ public class GenreDaoImpl implements GenreDao {
         }
     }
 
+    public void deleteGenre(Integer filmId) {
+        String sql = "DELETE FROM film_genres WHERE film_id = ?";
+        jdbcTemplate.update(sql, filmId);
+    }
+
     @Override
     public void updateFilmGenre(Integer filmId, Set<Genre> genres) {
         String sql = "UPDATE film_genres SET genre_id = ? WHERE film_id = ?";
         for (Genre genre : genres) {
-            jdbcTemplate.update(sql,genre.getId(), filmId);
+            jdbcTemplate.update(sql, genre.getId(), filmId);
             log.info("Обновляю жанр с ID: {} у фильма с ID: {}", genre.getId(), filmId);
         }
     }
+
     @Override
     public boolean isGenrePresent(Integer genreId) {
         try {

@@ -3,9 +3,14 @@ package ru.yandex.practicum.filmorate.storage.dao.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.film.Film;
+import ru.yandex.practicum.filmorate.model.film.MpaRating;
 import ru.yandex.practicum.filmorate.storage.dao.LikeDao;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -13,6 +18,19 @@ import java.util.Objects;
 public class LikeDaoImpl implements LikeDao {
 
     private final JdbcTemplate jdbcTemplate;
+    RowMapper<Film> filmMapper = ((rs, rowNum) -> {
+        Film film = new Film();
+        MpaRating mpa = new MpaRating();
+        mpa.setId(rs.getInt("rating_id"));
+        film.setId(rs.getInt("film_id"));
+        film.setName(rs.getString("film_name"));
+        film.setDescription(rs.getString("description"));
+        film.setReleaseDate(rs.getDate("release_date").toLocalDate());
+        film.setDuration(rs.getInt("duration"));
+        film.setMpa(mpa);
+
+        return film;
+    });
 
     @Autowired
     public LikeDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -30,11 +48,12 @@ public class LikeDaoImpl implements LikeDao {
     }
 
     @Override
-    public int getLikes(Integer filmId) {
-        String sql = "SELECT COUNT(*) FROM film_likes WHERE film_id = ?";
-        Integer likes = Objects.requireNonNull(jdbcTemplate.queryForObject(sql, Integer.class, filmId));
-        log.info("У фильма ID: {}, {} лайков.", filmId, likes);
-        return likes;
+    public Collection<Film> getPopularFilms(Integer count) {
+        String sql = "SELECT * FROM films "
+                    + "LEFT JOIN (SELECT film_id, COUNT(DISTINCT user_id) AS likes "
+                                + "FROM film_likes GROUP BY film_id) AS popular ON films.film_id = popular.film_id "
+                    + "ORDER BY popular.likes DESC LIMIT ?";
+        return jdbcTemplate.query(sql, filmMapper, count);
     }
 
     @Override

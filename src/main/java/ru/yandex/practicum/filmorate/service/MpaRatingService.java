@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +7,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.film.MpaRating;
 import ru.yandex.practicum.filmorate.storage.dao.MpaRatingDao;
 
-import java.util.List;
+import java.util.Collection;
 
 @Slf4j
 @Service
@@ -20,7 +19,7 @@ public class MpaRatingService {
         this.mpaRatingDao = mpaRatingDao;
     }
 
-    public List<MpaRating> getAll() {
+    public Collection<MpaRating> getAll() {
         return mpaRatingDao.getAllRatings();
     }
 

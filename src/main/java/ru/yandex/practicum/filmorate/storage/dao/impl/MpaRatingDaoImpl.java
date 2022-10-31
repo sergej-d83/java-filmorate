@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.film.MpaRating;
 import ru.yandex.practicum.filmorate.storage.dao.MpaRatingDao;
 
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -40,7 +41,7 @@ public class MpaRatingDaoImpl implements MpaRatingDao {
     }
 
     @Override
-    public List<MpaRating> getAllRatings() {
+    public Collection<MpaRating> getAllRatings() {
         String sql = "SELECT mpa_rating_id, rating_name FROM mpa_ratings ORDER BY mpa_rating_id";
 
         List<MpaRating> ratings = jdbcTemplate.query(sql, ratingMapper);

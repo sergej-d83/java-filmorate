@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model.film;
 
 import lombok.Data;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 @Data
 public class Film {
-    private Integer id;
+    private int id;
 
     @NotNull(message = "Обязательно должно быть название.")
     @NotBlank(message = "Название не может быть пустым.")
@@ -29,17 +30,7 @@ public class Film {
     private int duration;
 
     @NotNull(message = "Обязательно должен быть указан рейтинг.")
-    private MpaRating mpaRating;
+    private MpaRating mpa;
 
-    private Set<Genre> genre = new HashSet<>();
-    private Set<Integer> likes = new HashSet<>();
-
-//    public Film(Integer id, String name, String description, LocalDate releaseDate, int duration, int ratingId) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.releaseDate = releaseDate;
-//        this.duration = duration;
-//        this.ratingId = ratingId;
-//    }
+    private Set<Genre> genres = new HashSet<>();
 }

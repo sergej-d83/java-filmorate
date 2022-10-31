@@ -3,10 +3,8 @@ package ru.yandex.practicum.filmorate.storage.dao.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.storage.dao.FriendshipDao;
 
 import java.util.ArrayList;
@@ -18,17 +16,6 @@ import java.util.List;
 public class FriendshipDaoImpl implements FriendshipDao {
 
     private final JdbcTemplate jdbcTemplate;
-
-    private final RowMapper<User> userMapper = ((rs, rowNum) -> {
-        User user = new User();
-        user.setId(rs.getInt("user_id"));
-        user.setEmail(rs.getString("email"));
-        user.setLogin(rs.getString("login"));
-        user.setName(rs.getString("user_name"));
-        user.setBirthday(rs.getDate("birthday").toLocalDate());
-
-        return user;
-    });
 
     @Autowired
     public FriendshipDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -46,7 +33,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
     }
 
     @Override
-    public List<Integer> getFriends(Integer userId) {
+    public Collection<Integer> getFriends(Integer userId) {
         String sql = "SELECT friend_id FROM friendships WHERE user_id = ?";
         List<Integer> friends = new ArrayList<>();
         try {
