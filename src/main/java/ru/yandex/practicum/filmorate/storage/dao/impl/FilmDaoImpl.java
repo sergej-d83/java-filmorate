@@ -58,44 +58,35 @@ public class FilmDaoImpl implements FilmDao {
     @Override
     public Film createFilm(Film film) {
         String sql = "INSERT INTO films(film_name, description, release_date, duration, rating_id) VALUES(?, ?, ?, ?, ?)";
-        int insert = jdbcTemplate.update(sql, film.getName(), film.getDescription(),
-                            film.getReleaseDate(), film.getDuration(),
-                            film.getMpa().getId());
-
-        if (insert == 1) {
-            log.info("В базе создан новый фильм: {}", film);
-        } else {
-            log.info("Фильм не может быть создан в базе. {}", film);
-        }
+        jdbcTemplate.update(sql, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(),
+                                                                                          film.getMpa().getId()
+        );
 
         String sqlGetFilm = "SELECT * FROM films WHERE film_name = ? AND description = ? AND release_date = ? "
-                          + "AND duration = ? AND rating_id = ?";
+                + "AND duration = ? AND rating_id = ?";
 
-        return jdbcTemplate.queryForObject(sqlGetFilm, filmMapper, film.getName(), film.getDescription(),
-                                                                  film.getReleaseDate(), film.getDuration(),
-                                                                  film.getMpa().getId()
+        Film createdFilm = jdbcTemplate.queryForObject(sqlGetFilm, filmMapper, film.getName(), film.getDescription(),
+                                                                            film.getReleaseDate(), film.getDuration(),
+                                                                                                 film.getMpa().getId()
         );
+
+        log.info("В базе создан новый фильм: {}", createdFilm);
+        return createdFilm;
     }
 
     @Override
     public Film updateFilm(Film film) {
         String sql = "UPDATE films SET film_name = ?, description = ?, release_date = ?, duration = ?, rating_id = ? "
-                   + "WHERE film_id = ?";
+                + "WHERE film_id = ?";
 
-        int update = jdbcTemplate.update(sql, film.getName(), film.getDescription(), Date.valueOf(film.getReleaseDate())
-                                            , film.getDuration(), film.getMpa().getId(), film.getId()
+        jdbcTemplate.update(sql, film.getName(), film.getDescription(), Date.valueOf(film.getReleaseDate())
+                , film.getDuration(), film.getMpa().getId(), film.getId()
         );
-        if (update == 1) {
-            log.info("Фильм обновлён: {}", film.getName());
-        }
 
-        return film;
-    }
+        Film updatedFilm = getFilmById(film.getId());
+        log.info("Фильм обновлён: {}", updatedFilm);
 
-    @Override
-    public void deleteFilm(Integer filmId) {
-        jdbcTemplate.update("DELETE FROM films WHERE film_id = ?", filmId);
-        log.info("Фильм с ID: {} удалён", filmId);
+        return updatedFilm;
     }
 
     @Override

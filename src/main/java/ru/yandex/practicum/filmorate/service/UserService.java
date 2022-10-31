@@ -33,13 +33,17 @@ public class UserService {
 
     public User getUserById(Integer userId) {
         if (!userDao.isUserPresent(userId)) {
-            log.info("Пользователь с ID: {} не найден", userId);
-            throw new NotFoundException("Пользователь с ID: " + userId + "не найден");
+            log.info("Пользователь с ID {} не найден", userId);
+            throw new NotFoundException("Пользователь с ID " + userId + "не найден");
         }
         return userDao.getUserById(userId);
     }
 
     public User createUser(User user) {
+        if (user.getId() != 0) {
+            checkNewUserData(user.getId());
+        }
+
         if (user.getName().isBlank() || user.getName() == null) {
             user.setName(user.getLogin());
         }
@@ -49,37 +53,30 @@ public class UserService {
 
     public User updateUser(User user) {
         if (!userDao.isUserPresent(user.getId())) {
-            log.info("Пользователь с ID: {} не найден", user.getId());
-            throw new NotFoundException("Пользователь с ID: " + user.getId() + "не найден");
+            log.info("Пользователь с ID {} не найден", user.getId());
+            throw new NotFoundException("Пользователь с ID " + user.getId() + "не найден");
         }
         return userDao.updateUser(user);
     }
 
-    public void deleteUser(Integer userId) {
-        if (!userDao.isUserPresent(userId)) {
-            log.info("Пользователь с ID: {} не найден",userId);
-            throw new NotFoundException("Пользователь с ID: " + userId + "не найден");
-        }
-        userDao.deleteUser(userId);
-    }
-
     public void addFriend(Integer userId, Integer friendId) {
-        checkUserData(userId);
-        checkUserData(friendId);
+       if (userId != 0 && friendId != 0) {
+          checkFriendData(userId, friendId);
+       }
 
-        log.info("Добавление в друзья пользователя с ID: {} пользователю с ID: {}", friendId, userId);
+        log.info("Добавление в друзья пользователя с ID {} пользователю с ID {}", friendId, userId);
         friendshipDao.addFriend(userId, friendId);
     }
 
     public void removeFriend(Integer userId, Integer friendId) {
-        log.info("Удаление друга с ID: {} у пользователя с ID: {}", friendId, userId);
+        log.info("Удаление друга с ID {} у пользователя с ID {}", friendId, userId);
         friendshipDao.deleteFriend(userId, friendId);
     }
 
     public Collection<User> getFriends(Integer userId) {
         if (!userDao.isUserPresent(userId)) {
-            log.info("Пользователь с ID: {} не найден", userId);
-            throw new NotFoundException("Пользователь с ID: " + userId + " не найден");
+            log.info("Пользователь с ID {} не найден", userId);
+            throw new NotFoundException("Пользователь с ID " + userId + " не найден");
         }
 
         List<User> friends = new ArrayList<>();
@@ -106,13 +103,22 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    private void checkUserData(Integer userId) {
-        if (userId > 0) {
-            if (!userDao.isUserPresent(userId)) {
-                log.info("Пользователь с таким ID: {} уже существует", userId);
-                throw new AlreadyExistsException("Пользователь с таким ID: " + userId + " уже существует");
-            }
+    private void checkNewUserData(Integer userId) {
+        if (userDao.isUserPresent(userId)) {
+            log.info("Пользователь с таким ID: {} уже существует", userId);
+            throw new AlreadyExistsException("Пользователь с таким ID: " + userId + " уже существует");
         } else {
+            log.info("Пользователей с таким идентификатором не существует: {}", userId);
+            throw new NotFoundException("Пользователей с таким идентификатором не существует: " + userId);
+        }
+    }
+
+    private void checkFriendData(Integer userId, Integer friendId) {
+        if (!userDao.isUserPresent(friendId)) {
+            log.info("Пользователей с таким идентификатором не существует: {}", friendId);
+            throw new NotFoundException("Пользователей с таким идентификатором не существует: " + friendId);
+        }
+        if (!userDao.isUserPresent(userId)) {
             log.info("Пользователей с таким идентификатором не существует: {}", userId);
             throw new NotFoundException("Пользователей с таким идентификатором не существует: " + userId);
         }

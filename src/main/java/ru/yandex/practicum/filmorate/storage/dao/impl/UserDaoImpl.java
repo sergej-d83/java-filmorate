@@ -53,36 +53,27 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User createUser(User user) {
         String sql = "INSERT INTO users (email, login, user_name, birthday) VALUES(?, ?, ?, ?)";
-        int insert = jdbcTemplate.update(sql, user.getEmail(), user.getLogin(), user.getName(),
-                                                          Date.valueOf(user.getBirthday()));
-        if (insert == 1) {
-            log.info("В базе создан новый пользователь: {}", user.getLogin());
-        } else {
-            log.info("Пользователь не может быть создан в базе. {}", user);
-        }
+        jdbcTemplate.update(sql, user.getEmail(), user.getLogin(), user.getName(),
+                Date.valueOf(user.getBirthday()));
 
         String sqlGetUser = "SELECT * FROM users WHERE email = ? AND login = ? AND birthday = ?";
+        User createdUser = jdbcTemplate.queryForObject(sqlGetUser, userMapper, user.getEmail(), user.getLogin(),
+                user.getBirthday());
+        log.info("В базе создан новый пользователь: {}", createdUser);
 
-        return jdbcTemplate.queryForObject(sqlGetUser, userMapper, user.getEmail(), user.getLogin(),
-                                                                           user.getBirthday()
-        );
+        return createdUser;
     }
 
     @Override
     public User updateUser(User user) {
         String sql = "UPDATE users SET email = ?, login = ?, user_name = ?, birthday = ? WHERE user_id = ?";
-        int update = jdbcTemplate.update(sql, user.getEmail(), user.getLogin(), user.getName(),
-                                              Date.valueOf(user.getBirthday()), user.getId());
-        if (update == 1) {
-            log.info("Пользователь обновлён: {}", user.getLogin());
-        }
-        return user;
-    }
+        jdbcTemplate.update(sql, user.getEmail(), user.getLogin(), user.getName(),
+                Date.valueOf(user.getBirthday()), user.getId());
 
-    @Override
-    public void deleteUser(Integer userId) {
-        jdbcTemplate.update("DELETE FROM users WHERE user_id = ?", userId);
-        log.info("Пользователь с ID: {} удалён", userId);
+        User updatedUser = getUserById(user.getId());
+        log.info("Пользователь обновлён: {}", updatedUser);
+
+        return updatedUser;
     }
 
     @Override

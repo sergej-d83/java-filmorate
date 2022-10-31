@@ -83,14 +83,6 @@ public class FilmService {
         return updatedFilm;
     }
 
-    public void deleteFilm(Integer filmId) {
-        if (!filmDao.isFilmPresent(filmId)) {
-            throw new NotFoundException("Фильм с этим ID: " + filmId + " не найден");
-        }
-
-        filmDao.deleteFilm(filmId);
-    }
-
     public void addLike(Integer filmId, Integer userId) {
         likeDao.createLike(userId, filmId);
     }

@@ -60,8 +60,4 @@ public class UserController {
         return userService.updateUser(user);
     }
 
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Integer userId) {
-        userService.deleteUser(userId);
-    }
 }

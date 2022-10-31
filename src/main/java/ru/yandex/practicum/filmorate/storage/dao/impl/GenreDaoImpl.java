@@ -56,9 +56,7 @@ public class GenreDaoImpl implements GenreDao {
                     + "LEFT JOIN genres AS g ON g.genre_id = fg.genre_id "
                     + "WHERE fg.film_id = ? ORDER BY fg.genre_id";
 
-        Set<Genre> genres = new HashSet<>(jdbcTemplate.query(sql, genreMapper, filmId));
-        log.info("Genres: {}", genres);
-        return genres;
+        return new HashSet<>(jdbcTemplate.query(sql, genreMapper, filmId));
     }
 
     @Override
@@ -71,6 +69,7 @@ public class GenreDaoImpl implements GenreDao {
         }
     }
 
+    @Override
     public void deleteGenre(Integer filmId) {
         String sql = "DELETE FROM film_genres WHERE film_id = ?";
         jdbcTemplate.update(sql, filmId);

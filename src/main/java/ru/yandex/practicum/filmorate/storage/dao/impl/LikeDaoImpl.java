@@ -43,7 +43,7 @@ public class LikeDaoImpl implements LikeDao {
         int insert = jdbcTemplate.update(sql, filmId, userId);
 
         if (insert == 1) {
-            log.info("Пользователь ID: {} поставил лайк фильму ID: {}", userId, filmId);
+            log.info("Пользователь с ID: {} поставил лайк фильму с ID: {}", userId, filmId);
         }
     }
 

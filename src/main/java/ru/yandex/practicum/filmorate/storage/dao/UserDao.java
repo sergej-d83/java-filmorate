@@ -14,7 +14,5 @@ public interface UserDao {
 
     User updateUser(User user);
 
-    void deleteUser(Integer userId);
-
     boolean isUserPresent(Integer userId);
 }

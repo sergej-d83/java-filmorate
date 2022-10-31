@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Data
 public class User {
-    private Integer id;
+    private int id;
 
     @NotBlank(message = "Электронная почта не может быть пустой.")
     @Email(message = "Электронная почта должна быть в правильном формате.")

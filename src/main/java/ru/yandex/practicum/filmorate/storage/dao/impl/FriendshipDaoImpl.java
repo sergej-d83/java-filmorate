@@ -28,20 +28,15 @@ public class FriendshipDaoImpl implements FriendshipDao {
         int insert = jdbcTemplate.update(sql, userId, friendId);
 
         if (insert == 1) {
-            log.info("Пользователю ID: {} добавлен друг ID: {}", userId, friendId);
+            log.info("Пользователю с ID {} добавлен друг с ID {}", userId, friendId);
         }
     }
 
     @Override
     public Collection<Integer> getFriends(Integer userId) {
         String sql = "SELECT friend_id FROM friendships WHERE user_id = ?";
-        List<Integer> friends = new ArrayList<>();
-        try {
-            friends = jdbcTemplate.queryForList(sql, Integer.class, userId);
-        } catch (NotFoundException ex) {
-            log.info("Друзья не найдены");
-        }
-        return friends;
+
+        return jdbcTemplate.queryForList(sql, Integer.class, userId);
     }
 
     @Override
@@ -50,7 +45,7 @@ public class FriendshipDaoImpl implements FriendshipDao {
         int delete = jdbcTemplate.update(sql, userId, friendId);
 
         if (delete == 1) {
-            log.info("Друг ID: {} удалён у пользователя ID: {}", friendId, userId);
+            log.info("Друг с ID {} удалён у пользователя с ID {}", friendId, userId);
         }
     }
 }

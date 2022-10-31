@@ -13,7 +13,5 @@ public interface FilmDao {
 
     Film updateFilm(Film film);
 
-    void deleteFilm(Integer id);
-
     boolean isFilmPresent(Integer filmId);
 }

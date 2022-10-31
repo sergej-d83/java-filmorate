@@ -13,5 +13,4 @@ public interface GenreDao {
     void deleteGenre(Integer filmId);
     void updateFilmGenre(Integer filmId, Set<Genre> genres);
     boolean isGenrePresent(Integer genreId);
-
 }
