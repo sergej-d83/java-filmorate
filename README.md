@@ -1,4 +1,4 @@
 # Filmorate
 
 ### ER-Diagram:
-![](src/main/resources/ER-diagram.png)
+![](src/main/resources/ER_Diagram.png)

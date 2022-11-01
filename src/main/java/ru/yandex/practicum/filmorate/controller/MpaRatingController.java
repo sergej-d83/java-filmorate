@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.film.MpaRating;
 import ru.yandex.practicum.filmorate.service.MpaRatingService;
 
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("/mpa")

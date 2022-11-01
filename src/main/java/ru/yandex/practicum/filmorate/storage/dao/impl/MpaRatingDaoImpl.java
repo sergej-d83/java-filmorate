@@ -54,9 +54,9 @@ public class MpaRatingDaoImpl implements MpaRatingDao {
     public boolean isRatingPresent(Integer ratingId) {
         try {
             getRating(ratingId);
-            return true;
-        } catch (DataAccessException ex) {
             return false;
+        } catch (DataAccessException ex) {
+            return true;
         }
     }
 }

@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.model.film;
 
 import lombok.Data;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

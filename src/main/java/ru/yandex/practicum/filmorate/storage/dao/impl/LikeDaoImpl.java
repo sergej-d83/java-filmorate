@@ -10,8 +10,6 @@ import ru.yandex.practicum.filmorate.model.film.MpaRating;
 import ru.yandex.practicum.filmorate.storage.dao.LikeDao;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Component
@@ -50,9 +48,9 @@ public class LikeDaoImpl implements LikeDao {
     @Override
     public Collection<Film> getPopularFilms(Integer count) {
         String sql = "SELECT * FROM films "
-                    + "LEFT JOIN (SELECT film_id, COUNT(DISTINCT user_id) AS likes "
-                                + "FROM film_likes GROUP BY film_id) AS popular ON films.film_id = popular.film_id "
-                    + "ORDER BY popular.likes DESC LIMIT ?";
+                + "LEFT JOIN (SELECT film_id, COUNT(DISTINCT user_id) AS likes "
+                + "FROM film_likes GROUP BY film_id) AS popular ON films.film_id = popular.film_id "
+                + "ORDER BY popular.likes DESC LIMIT ?";
         return jdbcTemplate.query(sql, filmMapper, count);
     }
 

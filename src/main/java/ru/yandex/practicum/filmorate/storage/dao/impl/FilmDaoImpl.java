@@ -59,15 +59,15 @@ public class FilmDaoImpl implements FilmDao {
     public Film createFilm(Film film) {
         String sql = "INSERT INTO films(film_name, description, release_date, duration, rating_id) VALUES(?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(),
-                                                                                          film.getMpa().getId()
+                film.getMpa().getId()
         );
 
         String sqlGetFilm = "SELECT * FROM films WHERE film_name = ? AND description = ? AND release_date = ? "
                 + "AND duration = ? AND rating_id = ?";
 
         Film createdFilm = jdbcTemplate.queryForObject(sqlGetFilm, filmMapper, film.getName(), film.getDescription(),
-                                                                            film.getReleaseDate(), film.getDuration(),
-                                                                                                 film.getMpa().getId()
+                film.getReleaseDate(), film.getDuration(),
+                film.getMpa().getId()
         );
 
         log.info("В базе создан новый фильм: {}", createdFilm);

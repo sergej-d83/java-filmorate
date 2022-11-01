@@ -14,7 +14,6 @@ import ru.yandex.practicum.filmorate.storage.dao.*;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service("FilmService")
 @Slf4j
@@ -61,25 +60,44 @@ public class FilmService {
     }
 
     public Film createFilm(Film film) {
+
+        if (film.getId() != 0) {
+            if (filmDao.isFilmPresent(film.getId())) {
+                log.info("Фильм с таким ID: {} уже существует", film.getId());
+                throw new AlreadyExistsException("Фильм с таким ID: " + film.getId() + " уже существует:");
+            } else {
+                throw new IllegalArgumentException("Не правильный идентификатор фильма: " + film.getId());
+            }
+        }
+
         validateReleaseDate(film);
-        checkBeforeAdd(film);
+        checkFilmData(film);
 
         Film newFilm = filmDao.createFilm(film);
+
         genreDao.addGenreToFilm(newFilm.getId(), film.getGenres());
         newFilm.setGenres(genreDao.getGenresOfFilm(newFilm.getId()));
         newFilm.setMpa(mpaRatingDao.getRating(newFilm.getMpa().getId()));
+
         return newFilm;
     }
 
     public Film updateFilm(Film film) {
+
+        if (!filmDao.isFilmPresent(film.getId())) {
+            log.info("Фильм с таким ID: {} не найден", film.getId());
+            throw new NotFoundException("Фильм с таким ID: " + film.getId() + " не найден:");
+        }
         validateReleaseDate(film);
-        checkBeforeUpdate(film);
+        checkFilmData(film);
 
         Film updatedFilm = filmDao.updateFilm(film);
+
         genreDao.deleteGenre(updatedFilm.getId());
         genreDao.addGenreToFilm(film.getId(), film.getGenres());
         updatedFilm.setGenres(genreDao.getGenresOfFilm(updatedFilm.getId()));
         updatedFilm.setMpa(mpaRatingDao.getRating(updatedFilm.getMpa().getId()));
+
         return updatedFilm;
     }
 
@@ -108,34 +126,9 @@ public class FilmService {
         }
     }
 
-    private void checkBeforeAdd(Film film) {
-        if (film.getId() != 0) {
-            if (filmDao.isFilmPresent(film.getId())) {
-                log.info("Фильм с таким ID: {} уже существует", film.getId());
-                throw new AlreadyExistsException("Фильм с таким ID: " + film.getId() + " уже существует:");
-            } else {
-                throw new IllegalArgumentException("Не правильный идентификатор фильма: " + film.getId());
-            }
-        }
-        if (!mpaRatingDao.isRatingPresent(film.getMpa().getId())) {
-            log.info("Рейтинг с ID: {} не найден", film.getMpa().getId());
-            throw new NotFoundException("Рейтинг с ID: " + film.getMpa().getId() + " не найден");
-        }
-        for (Genre genre : film.getGenres()) {
-            if (!genreDao.isGenrePresent(genre.getId())) {
-                log.info("Жанр с ID: {} не найден", genre.getId());
-                throw new NotFoundException("Жанр с ID: " + genre.getId() + " не найден");
-            }
-        }
-    }
+    private void checkFilmData(Film film) {
 
-    private void checkBeforeUpdate(Film film) {
-
-        if (!filmDao.isFilmPresent(film.getId())) {
-            log.info("Фильм с таким ID: {} не найден", film.getId());
-            throw new NotFoundException("Фильм с таким ID: " + film.getId() + " не найден:");
-        }
-        if (!mpaRatingDao.isRatingPresent(film.getMpa().getId())) {
+        if (mpaRatingDao.isRatingPresent(film.getMpa().getId())) {
             log.info("Рейтинг с ID: {} не найден", film.getMpa().getId());
             throw new NotFoundException("Рейтинг с ID: " + film.getMpa().getId() + " не найден");
         }

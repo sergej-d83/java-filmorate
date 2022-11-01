@@ -53,8 +53,8 @@ public class GenreDaoImpl implements GenreDao {
     @Override
     public Set<Genre> getGenresOfFilm(Integer filmId) {
         String sql = "SELECT * FROM film_genres AS fg "
-                    + "LEFT JOIN genres AS g ON g.genre_id = fg.genre_id "
-                    + "WHERE fg.film_id = ? ORDER BY fg.genre_id";
+                + "LEFT JOIN genres AS g ON g.genre_id = fg.genre_id "
+                + "WHERE fg.film_id = ? ORDER BY fg.genre_id";
 
         return new HashSet<>(jdbcTemplate.query(sql, genreMapper, filmId));
     }
@@ -73,15 +73,6 @@ public class GenreDaoImpl implements GenreDao {
     public void deleteGenre(Integer filmId) {
         String sql = "DELETE FROM film_genres WHERE film_id = ?";
         jdbcTemplate.update(sql, filmId);
-    }
-
-    @Override
-    public void updateFilmGenre(Integer filmId, Set<Genre> genres) {
-        String sql = "UPDATE film_genres SET genre_id = ? WHERE film_id = ?";
-        for (Genre genre : genres) {
-            jdbcTemplate.update(sql, genre.getId(), filmId);
-            log.info("Обновляю жанр с ID: {} у фильма с ID: {}", genre.getId(), filmId);
-        }
     }
 
     @Override

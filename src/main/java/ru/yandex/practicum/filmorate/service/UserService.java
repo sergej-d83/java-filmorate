@@ -60,9 +60,9 @@ public class UserService {
     }
 
     public void addFriend(Integer userId, Integer friendId) {
-       if (userId != 0 && friendId != 0) {
-          checkFriendData(userId, friendId);
-       }
+        if (userId != 0 && friendId != 0) {
+            checkFriendData(userId, friendId);
+        }
 
         log.info("Добавление в друзья пользователя с ID {} пользователю с ID {}", friendId, userId);
         friendshipDao.addFriend(userId, friendId);

@@ -24,7 +24,7 @@ public class MpaRatingService {
     }
 
     public MpaRating getRatingById(Integer ratingId) {
-        if (!mpaRatingDao.isRatingPresent(ratingId)) {
+        if (mpaRatingDao.isRatingPresent(ratingId)) {
             log.info("Рейтинг с ID: {} не найден", ratingId);
             throw new NotFoundException("Рейтинг с ID: " + ratingId + " не найден");
         }
