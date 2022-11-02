@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.dao.impl;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,6 +16,7 @@ import java.util.Collection;
 
 @Slf4j
 @Component("FilmDaoImpl")
+@Data
 public class FilmDaoImpl implements FilmDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -33,11 +34,6 @@ public class FilmDaoImpl implements FilmDao {
 
         return film;
     });
-
-    @Autowired
-    public FilmDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public Film getFilmById(Integer filmId) {

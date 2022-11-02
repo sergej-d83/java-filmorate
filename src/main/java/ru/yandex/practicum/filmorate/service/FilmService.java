@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.AlreadyExistsException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -17,6 +16,7 @@ import java.util.List;
 
 @Service("FilmService")
 @Slf4j
+@Data
 public class FilmService {
 
     private final FilmDao filmDao;
@@ -25,19 +25,6 @@ public class FilmService {
     private final LikeDao likeDao;
     private final MpaRatingDao mpaRatingDao;
     private final LocalDate EARLIEST_DATE = LocalDate.of(1895, 12, 28);
-
-
-    @Autowired
-    public FilmService(@Qualifier("FilmDaoImpl") FilmDao filmDao,
-                       @Qualifier("UserDaoImpl") UserDao userDao, GenreDao genreDao,
-                       LikeDao likeDao, MpaRatingDao mpaRatingDao
-    ) {
-        this.filmDao = filmDao;
-        this.userDao = userDao;
-        this.genreDao = genreDao;
-        this.likeDao = likeDao;
-        this.mpaRatingDao = mpaRatingDao;
-    }
 
     public Collection<Film> getAllFilms() {
         List<Film> films = (List<Film>) filmDao.getAllFilms();

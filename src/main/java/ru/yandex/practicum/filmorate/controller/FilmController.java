@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -11,13 +10,9 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/films")
+@Data
 public class FilmController {
     private final FilmService filmService;
-
-    @Autowired
-    public FilmController(@Qualifier("FilmService") FilmService filmService) {
-        this.filmService = filmService;
-    }
 
     @GetMapping
     public Collection<Film> getAllFilms() {

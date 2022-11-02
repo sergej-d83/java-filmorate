@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.AlreadyExistsException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -16,16 +16,11 @@ import java.util.stream.Collectors;
 
 @Service("UserService")
 @Slf4j
+@Data
 public class UserService {
 
     private final UserDao userDao;
     private final FriendshipDao friendshipDao;
-
-    @Autowired
-    public UserService(UserDao userDao, FriendshipDao friendshipDao) {
-        this.userDao = userDao;
-        this.friendshipDao = friendshipDao;
-    }
 
     public Collection<User> getAllUsers() {
         return userDao.getAllUsers();

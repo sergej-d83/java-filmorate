@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.dao.impl;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,6 +14,7 @@ import java.util.List;
 
 @Slf4j
 @Component
+@Data
 public class MpaRatingDaoImpl implements MpaRatingDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -24,11 +25,6 @@ public class MpaRatingDaoImpl implements MpaRatingDao {
         mpaRating.setName(rs.getString("rating_name"));
         return mpaRating;
     });
-
-    @Autowired
-    public MpaRatingDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public MpaRating getRating(Integer mpaId) {

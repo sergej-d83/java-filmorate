@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.dao.impl;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,6 +15,7 @@ import java.util.Collection;
 
 @Slf4j
 @Component("UserDaoImpl")
+@Data
 public class UserDaoImpl implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -29,11 +30,6 @@ public class UserDaoImpl implements UserDao {
 
         return user;
     });
-
-    @Autowired
-    public UserDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public Collection<User> getAllUsers() {
