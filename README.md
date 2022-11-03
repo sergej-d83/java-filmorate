@@ -1,2 +1,4 @@
-# java-filmorate
-Template repository for Filmorate project.
+# Filmorate
+
+### ER-Diagram:
+![](src/main/resources/ER_Diagram.png)

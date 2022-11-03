@@ -1,24 +1,22 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/users")
+@Data
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping
-    public List<User> getAllUsers() {
+    public Collection<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
@@ -28,12 +26,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/friends")
-    public List<User> getUserFriends(@PathVariable Integer userId) {
-        return userService.getUserFriends(userId);
+    public Collection<User> getUserFriends(@PathVariable Integer userId) {
+        return userService.getFriends(userId);
     }
 
     @GetMapping("/{userId}/friends/common/{otherId}")
-    public List<User> getCommonFriends(@PathVariable Integer userId, @PathVariable Integer otherId) {
+    public Collection<User> getCommonFriends(@PathVariable Integer userId, @PathVariable Integer otherId) {
         return userService.getCommonFriends(userId, otherId);
     }
 
@@ -56,4 +54,5 @@ public class UserController {
     public User updateUser(@Valid @RequestBody User user) {
         return userService.updateUser(user);
     }
+
 }
